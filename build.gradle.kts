@@ -30,14 +30,6 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir("${buildDir}/generate-resources/main/src")
-        }
-    }
-}
-
 java {
     toolchain {
         // Use the same Java version variable defined earlier
