@@ -9,7 +9,7 @@
     </appender>
 
     <!-- Root logger: Log level = INFO, uses CONSOLE appender -->
-    <root level="INFO">
+    <root level="TRACE">
         <appender-ref ref="CONSOLE" />
     </root>
 

@@ -1,10 +1,10 @@
 package dev.thecampground.dev.thecampground.flukt
 
 data class FluktOptions(
-    val baseUrl: String = "https://api.fluxer.app",
-    val token: String? = null,
-    val debug: Boolean = false,
+    var baseUrl: String = "https://api.fluxer.app",
+    var token: String? = null,
+    var debug: Boolean = false,
 
-    val maxRetries: Int = 3,
-    val retryOnException: Boolean = true,
+    var maxRetries: Int = 3,
+    var retryOnException: Boolean = true,
 )

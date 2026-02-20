@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory
 suspend fun main() {
     val logger = LoggerFactory.getLogger("Main")
     val client = FluktClient.create {
-
+        token = System.getenv("flukt_token")
     }
 
+
+    client.self.getSelf()
 // Access the data reactively
 //    client.instance.data.collect { info ->
 //        println("Connected to Fluxer Instance: ${info?.endpoints?.api ?: "Connecting..."}")
