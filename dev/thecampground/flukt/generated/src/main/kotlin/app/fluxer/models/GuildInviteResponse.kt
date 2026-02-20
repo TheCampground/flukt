@@ -1,0 +1,97 @@
+package app.fluxer.models
+
+import com.fasterxml.jackson.`annotation`.JsonProperty
+import jakarta.validation.Valid
+import jakarta.validation.constraints.DecimalMax
+import jakarta.validation.constraints.DecimalMin
+import jakarta.validation.constraints.NotNull
+import java.time.OffsetDateTime
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.String
+
+public data class GuildInviteResponse(
+  /**
+   * The unique invite code
+   */
+  @param:JsonProperty("code")
+  @get:JsonProperty("code")
+  @get:NotNull
+  public val code: String,
+  /**
+   * The type of invite (guild)
+   */
+  @param:JsonProperty(
+    "type",
+    required = true,
+  )
+  @get:JsonProperty("type")
+  @get:NotNull
+  public val type: Int,
+  /**
+   * The guild this invite is for
+   */
+  @param:JsonProperty("guild")
+  @get:JsonProperty("guild")
+  @get:NotNull
+  @get:Valid
+  public val guild: GuildInviteResponseGuild,
+  @param:JsonProperty("channel")
+  @get:JsonProperty("channel")
+  @get:NotNull
+  @get:Valid
+  public val channel: ChannelPartialResponse,
+  @param:JsonProperty("inviter")
+  @get:JsonProperty("inviter")
+  @get:Valid
+  public val inviter: UserPartialResponse? = null,
+  /**
+   * The approximate total member count of the guild
+   */
+  @param:JsonProperty(
+    "member_count",
+    required = true,
+  )
+  @get:JsonProperty("member_count")
+  @get:NotNull
+  @get:DecimalMin(
+    value = "0",
+    inclusive = true,
+  )
+  @get:DecimalMax(
+    value = "2147483647",
+    inclusive = true,
+  )
+  public val memberCount: Int,
+  /**
+   * The approximate online member count of the guild
+   */
+  @param:JsonProperty(
+    "presence_count",
+    required = true,
+  )
+  @get:JsonProperty("presence_count")
+  @get:NotNull
+  @get:DecimalMin(
+    value = "0",
+    inclusive = true,
+  )
+  @get:DecimalMax(
+    value = "2147483647",
+    inclusive = true,
+  )
+  public val presenceCount: Int,
+  @param:JsonProperty("expires_at")
+  @get:JsonProperty("expires_at")
+  public val expiresAt: OffsetDateTime? = null,
+  /**
+   * Whether the invite grants temporary membership
+   */
+  @param:JsonProperty(
+    "temporary",
+    required = true,
+  )
+  @get:JsonProperty("temporary")
+  @get:NotNull
+  public val temporary: Boolean,
+)

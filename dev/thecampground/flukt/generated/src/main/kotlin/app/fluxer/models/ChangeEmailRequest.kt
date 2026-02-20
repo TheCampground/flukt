@@ -1,0 +1,18 @@
+package app.fluxer.models
+
+import com.fasterxml.jackson.`annotation`.JsonProperty
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
+import kotlin.String
+
+public data class ChangeEmailRequest(
+  @param:JsonProperty("user_id")
+  @get:JsonProperty("user_id")
+  @get:NotNull
+  @get:Pattern(regexp = "^(0|[1-9][0-9]*)${'$'}")
+  public val userId: String,
+  @param:JsonProperty("email")
+  @get:JsonProperty("email")
+  @get:NotNull
+  public val email: String,
+)
