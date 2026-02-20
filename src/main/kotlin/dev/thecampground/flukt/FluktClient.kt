@@ -13,53 +13,43 @@ import app.fluxer.client.NetworkResult
 import app.fluxer.client.WellKnownFluxerClient
 import app.fluxer.models.WellKnownFluxerResponse
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import dev.thecampground.dev.thecampground.flukt.core.AuthManagerInternal
+import dev.thecampground.dev.thecampground.flukt.core.InstanceManagerInternal
+import dev.thecampground.dev.thecampground.flukt.di.createSdkModule
+import io.ktor.client.request.get
 import io.ktor.serialization.jackson.jackson
 import kotlinx.coroutines.runBlocking
+import org.koin.dsl.koinApplication
+import org.slf4j.LoggerFactory
+import kotlin.time.measureTime
 
-class FluktClient(
-    private val baseUrl: String = "https://api.fluxer.app",
-    private val httpClient: HttpClient = HttpClient(CIO) {
-        install(DefaultRequest) {
-            url(baseUrl)
-        }
-        install(ContentNegotiation) {
-            jackson {
-                registerKotlinModule()
+class FluktClient private constructor(private val koin: Koin) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
+    // Expose your managers to the user
+    val instance: InstanceManagerInternal by koin.inject()
+
+    val auth: AuthManagerInternal by koin.inject()
+
+    companion object {
+        /**
+         * Create's a Flukt Client.
+         */
+        suspend fun create(builder: FluktOptions.() -> Unit = {}): FluktClient {
+            val fluktCreationTimeStart = System.currentTimeMillis()
+            val options = FluktOptions().apply(builder)
+
+            // Create an isolated Koin context
+            val koinApp = koinApplication {
+                modules(createSdkModule(options))
             }
+
+            val client = FluktClient(koinApp.koin)
+
+            client.logger.info("Flukt started in {}", "${System.currentTimeMillis()-fluktCreationTimeStart}ms!")
+            client.instance.refresh()
+
+            return client
         }
-    }
-) {
-    var instance: WellKnownFluxerResponse
-        private set
-
-    private val koin: Koin
-
-    val auth: AuthLoginClient
-
-    init {
-        val koinApp = startKoin {
-            modules(
-                module {
-                    single { httpClient }
-                },
-                createApiModule()
-            )
-        }
-
-        koin = koinApp.koin
-
-        auth = koin.get()
-
-        runBlocking {
-            when (val wellKnownFluxerClient = koin.get<WellKnownFluxerClient>().getWellKnownFluxer()) {
-                is NetworkResult.Success -> {
-                    instance = wellKnownFluxerClient.data
-                }
-                else -> {
-                    error("Couldn't establish a network client")
-                }
-            }
-        }
-
     }
 }

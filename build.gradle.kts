@@ -72,6 +72,11 @@ dependencies {
     implementation("jakarta.annotation:jakarta.annotation-api:3.0.0")
     // Source: https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     implementation("jakarta.validation:jakarta.validation-api:3.1.1")
+
+    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
 }
 
 tasks.test {
